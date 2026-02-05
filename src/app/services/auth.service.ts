@@ -1,11 +1,15 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable, tap } from "rxjs";
+import { Store } from "../store/store";
+import { Router } from "@angular/router";
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
     private url = 'http://localhost:8080/api/auth';
     private http: HttpClient = inject(HttpClient);
+    private store: Store = inject(Store);
+    private router: Router = inject(Router);
 
     register(data: any) : Observable<any> {
         return this.http.post(`${this.url}/register`, data).pipe(
@@ -22,6 +26,9 @@ export class AuthService {
       tap((res: any) => {
         if (res.token) {
           localStorage.setItem('token', res.token);
+          localStorage.setItem('user', JSON.stringify(res.user));
+          this.store.setState(res.user, res.token);
+          this.router.navigate(['/subscriptions', res.user.id]);
         }
       })
     );
@@ -29,6 +36,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('token');
+    this.store.clearState();
   }
 
   getToken(): string | null {

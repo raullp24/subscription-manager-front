@@ -7,7 +7,6 @@ export class SubscriptionsService {
     
     private http: HttpClient = inject(HttpClient);
 
-    
     getSubscriptionsByUserId(userId: string){
         const token = localStorage.getItem('token');
         return this.http.get<any[]>(`http://localhost:8080/api/subscriptions/user/${userId}`, {
@@ -17,4 +16,12 @@ export class SubscriptionsService {
         });
     }
     
+    saveSubscription(subscription: any) {
+        const token = localStorage.getItem('token');
+        return this.http.post('http://localhost:8080/api/subscriptions', subscription, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    }
 }

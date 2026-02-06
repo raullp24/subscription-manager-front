@@ -1,12 +1,65 @@
-<div class="container mt-4">
+<div class="container mt-4 text-center">
   <h1 class="mb-3">Subscriptions</h1>
   <p class="text-muted">Here you can manage your subscriptions.</p>
+  <button class="btn btn-primary mb-4" (click)="toogleForm()">Add New Subscription</button>
+
+  <div class="subscriptionForm card shadow-sm mb-4 text-start" *ngIf="showForm">
+    <span>aparezco</span>
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">New Subscription</h5>
+      <button class="btn btn-sm btn-outline-danger" (click)="closeForm()">X</button>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="subscriptionForm" (ngSubmit)="saveSubscription()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control" formControlName="name" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Price (€)</label>
+            <input type="number" step="0.01" class="form-control" formControlName="price" />
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" rows="2" formControlName="description"></textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Periodicity</label>
+            <select class="form-select" formControlName="periodicity">
+              <option value="">Select...</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Yearly">Yearly</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Auto-renewal</label>
+            <select class="form-select" formControlName="autoRenewal">
+              <option value="">Select...</option>
+              <option [value]="true">Yes</option>
+              <option [value]="false">No</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Start Date</label>
+            <input type="date" class="form-control" formControlName="startDate" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">End Date</label>
+            <input type="date" class="form-control" formControlName="endDate" />
+          </div>
+        </div>
+        <div class="mt-4 text-end">
+          <button type="submit" class="btn btn-success">Save Subscription</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <div class="row g-4">
     @for (subscription of subscriptions; track subscription.id) {
       <div class="col-md-6 col-lg-4">
         <div class="card shadow-sm h-100 subscription-card">
-          
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-start">
               <h5 class="card-title">{{ subscription.name }}</h5>
@@ -27,7 +80,6 @@
           <div class="card-footer bg-white border-0 d-flex justify-content-end">
             <button class="btn btn-outline-primary btn-sm">Manage</button>
           </div>
-
         </div>
       </div>
     }

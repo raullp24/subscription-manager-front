@@ -4,11 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, Validators} from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Navbar } from "../navbar/navbar";
 
 @Component({
   selector: 'app-subscriptions',
   templateUrl: './subscriptions.html',
-  imports: [ReactiveFormsModule, NgIf],
+  imports: [ReactiveFormsModule, NgIf, Navbar],
   styleUrl: './subscriptions.css',
 })
 export class Subscriptions implements OnInit {

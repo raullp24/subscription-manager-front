@@ -1,13 +1,13 @@
 import { Component, inject, OnInit, signal} from '@angular/core';
 import { SubscriptionsService } from '../services/subscriptions';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, Validators} from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Navbar } from "../navbar/navbar";
 
 @Component({
   selector: 'app-subscriptions',
-  templateUrl: './subscriptions.html',  imports: [ReactiveFormsModule, Navbar],
+  templateUrl: './subscriptions.html',  imports: [ReactiveFormsModule, Navbar, RouterLink],
   styleUrl: './subscriptions.css',
 })
 export class Subscriptions implements OnInit {

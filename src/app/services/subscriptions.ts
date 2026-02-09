@@ -15,6 +15,15 @@ export class SubscriptionsService {
             }
         });
     }
+
+    getSubscriptionById(id: string){
+        const token = localStorage.getItem('token');
+        return this.http.get<any[]>(`http://localhost:8080/api/subscriptions/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    }
     
     saveSubscription(subscription: any) {
         const token = localStorage.getItem('token');

@@ -1,0 +1,80 @@
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+      @if (subscription()) {
+        <div class="card shadow-lg">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">{{ subscription()?.name }}</h4>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <h6 class="text-muted">Description</h6>
+              <p>{{ subscription()?.description || 'No description available' }}</p>
+            </div>
+
+            <hr />
+
+            <div class="row mb-3">
+              <div class="col-6">
+                <h6 class="text-muted">Price</h6>
+                <p class="fs-4 text-success">
+                  <strong>{{ subscription()?.price }} €</strong>
+                </p>
+              </div>
+              <div class="col-6">
+                <h6 class="text-muted">Periodicity</h6>
+                <p class="fs-5">{{ subscription()?.periodicity }}</p>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-6">
+                <h6 class="text-muted">Auto-renewal</h6>
+                <p>
+                  <span
+                    [class]="
+                      subscription()?.autoRenewal ? 'badge bg-success' : 'badge bg-secondary'
+                    "
+                  >
+                    {{ subscription()?.autoRenewal ? 'Yes' : 'No' }}
+                  </span>
+                </p>
+              </div>
+              <div class="col-6">
+                <h6 class="text-muted">Status</h6>
+                <p>
+                  <span class="badge bg-info">Active</span>
+                </p>
+              </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+              <div class="col-6">
+                <h6 class="text-muted">Start Date</h6>
+                <p>{{ subscription()?.startDate }}</p>
+              </div>
+              <div class="col-6">
+                <h6 class="text-muted">End Date</h6>
+                <p>{{ subscription()?.endDate || 'No end date' }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer bg-white d-flex justify-content-between">
+            <button class="btn btn-outline-secondary" [routerLink]="['/subscriptions', userId()]">
+              ← Back
+            </button>
+            <button class="btn btn-primary">Edit</button>
+          </div>
+        </div>
+      } @else {
+        <div class="card shadow">
+          <div class="card-body text-center py-5">
+            <p class="text-muted">Loading subscription details...</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

@@ -1,27 +1,24 @@
-import { Component, inject, OnInit, ChangeDetectorRef} from '@angular/core';
+import { Component, inject, OnInit, signal} from '@angular/core';
 import { SubscriptionsService } from '../services/subscriptions';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, Validators} from '@angular/forms';
-import { NgIf } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Navbar } from "../navbar/navbar";
 
 @Component({
   selector: 'app-subscriptions',
-  templateUrl: './subscriptions.html',
-  imports: [ReactiveFormsModule, NgIf, Navbar],
+  templateUrl: './subscriptions.html',  imports: [ReactiveFormsModule, Navbar],
   styleUrl: './subscriptions.css',
 })
 export class Subscriptions implements OnInit {
   private subscriptonService: SubscriptionsService = inject(SubscriptionsService);
   private route: ActivatedRoute = inject(ActivatedRoute);
-  private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   userId: string = this.route.snapshot.paramMap.get('userId') || '';
 
-  showForm: boolean = false;
+  showForm = signal(false);
 
-  subscriptions: any[] = [];
+  subscriptions = signal<any[]>([]);
 
   ngOnInit() {
     this.route.paramMap.subscribe(() => {
@@ -34,8 +31,7 @@ export class Subscriptions implements OnInit {
   loadSubscriptions(userId: string) {
     this.subscriptonService.getSubscriptionsByUserId(userId).subscribe({
       next: (data) => {
-        this.subscriptions = [...data];
-        this.cdr.detectChanges();
+        this.subscriptions.set(data);
       },
       error: (err) => {
         console.error('Error fetching subscriptions:', err);
@@ -58,11 +54,11 @@ export class Subscriptions implements OnInit {
   formatDate = (d: Date) => d.toISOString().split('T')[0];
 
   toogleForm(){
-    this.showForm = !this.showForm;
+    this.showForm.update(value => !value);
   }
 
   closeForm(){
-    this.showForm = false;
+    this.showForm.set(false);
     this.subscriptionForm.reset();
   }
 

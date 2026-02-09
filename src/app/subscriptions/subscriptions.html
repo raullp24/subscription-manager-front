@@ -1,11 +1,11 @@
 <app-navbar>    </app-navbar>
-<div class="container mt-4 text-center">
+<div class="container mt-4 mb-4 text-center">
   <h1 class="mb-3">Subscriptions</h1>
   <p class="text-muted">Here you can manage your subscriptions.</p>
   <button class="btn btn-primary mb-4" (click)="toogleForm()">Add New Subscription</button>
 
-  <div class="subscriptionForm card shadow-sm mb-4 text-start" *ngIf="showForm">
-    <span>aparezco</span>
+  @if (showForm()) {
+  <div class="subscriptionForm card shadow-sm mb-4 text-start">
     <div class="card-header d-flex justify-content-between align-items-center">
       <h5 class="mb-0">New Subscription</h5>
       <button class="btn btn-sm btn-outline-danger" (click)="closeForm()">X</button>
@@ -56,9 +56,10 @@
       </form>
     </div>
   </div>
+  }
 
   <div class="row g-4">
-    @for (subscription of subscriptions; track subscription.id) {
+    @for (subscription of subscriptions(); track subscription.id) {
       <div class="col-md-6 col-lg-4">
         <div class="card shadow-sm h-100 subscription-card">
           <div class="card-body">

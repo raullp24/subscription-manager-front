@@ -1,6 +1,12 @@
 <div class="container d-flex justify-content-center align-items-center vh-100">
   <div class="card shadow p-4" style="max-width: 400px; width: 100%;">
-    <h3 class="text-center mb-4">Registrarse</h3>
+    <div class="d-flex align-items-center mb-3">
+      <a routerLink="/" class="btn btn-sm btn-outline-secondary me-2">
+        ← Inicio
+      </a>
+      <h3 class="mb-0 flex-grow-1 text-center">Registrarse</h3>
+      <div style="width: 60px;"></div>
+    </div>
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <div class="mb-3">
@@ -50,6 +56,11 @@
           Registrarse
         </button>
       </div>
+
+      <p class="text-center mt-3 mb-0">
+        ¿Ya tienes cuenta?
+        <a routerLink="/login">Inicia sesión</a>
+      </p>
     </form>
   </div>
 </div>

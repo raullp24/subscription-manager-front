@@ -18,7 +18,7 @@ export class SubscriptionsService {
 
     getSubscriptionById(id: string){
         const token = localStorage.getItem('token');
-        return this.http.get<any[]>(`http://localhost:8080/api/subscriptions/${id}`, {
+        return this.http.get<any>(`http://localhost:8080/api/subscriptions/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -28,6 +28,15 @@ export class SubscriptionsService {
     saveSubscription(subscription: any) {
         const token = localStorage.getItem('token');
         return this.http.post('http://localhost:8080/api/subscriptions', subscription, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    }
+
+    updateSubscription(id: string, subscription: any) {
+        const token = localStorage.getItem('token');
+        return this.http.put(`http://localhost:8080/api/subscriptions/${id}`, subscription, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

@@ -142,7 +142,10 @@ export class Subscriptions implements OnInit {
 
   closeForm(){
     this.showForm.set(false);
-    this.subscriptionForm.reset();
+    this.subscriptionForm.reset({
+      userId: this.userId,
+      status: 'active',
+    });
   }
 
   saveSubscription() {

@@ -92,6 +92,9 @@
               <li><strong>Periodicity:</strong> {{ subscription.periodicity }}</li>
               <li><strong>Auto-renewal:</strong> {{ subscription.autoRenewal ? 'Yes' : 'No' }}</li>
               <li><strong>Start:</strong> {{ subscription.startDate }}</li>
+              @if (!subscription.autoRenewal) {
+                <li><strong>End:</strong> {{ subscription.endDate }}</li>
+              }
             </ul>
           </div>
 

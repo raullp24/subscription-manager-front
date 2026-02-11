@@ -1,13 +1,16 @@
-import { Component, inject, OnInit, signal} from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal} from '@angular/core';
 import { SubscriptionsService } from '../services/subscriptions';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, Validators} from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Navbar } from "../navbar/navbar";
+import { BaseChartDirective } from 'ng2-charts';
+import { ChartConfiguration } from 'chart.js';
 
 @Component({
   selector: 'app-subscriptions',
-  templateUrl: './subscriptions.html',  imports: [ReactiveFormsModule, Navbar, RouterLink],
+  templateUrl: './subscriptions.html',  
+  imports: [ReactiveFormsModule, Navbar, RouterLink, BaseChartDirective],
   styleUrl: './subscriptions.css',
 })
 export class Subscriptions implements OnInit {
@@ -19,6 +22,86 @@ export class Subscriptions implements OnInit {
   showForm = signal(false);
 
   subscriptions = signal<any[]>([]);
+
+  totalMonthlyCost = computed(() => {
+    let total = 0;
+    for (const sub of this.subscriptions()) {
+      if (sub.status === 'active') {
+        if(sub.periodicity === 'MONTHLY') {
+          total += sub.price;
+        }
+        else if(sub.periodicity === 'YEARLY') {
+          total += sub.price / 12;
+        }
+      }
+    }
+    return total;
+  });
+
+  
+  public barChartData: ChartConfiguration<'bar'>['data'] = {
+    labels: [],
+    datasets: [
+      { 
+        data: [], 
+        label: 'Monthly Cost (€)', 
+        backgroundColor: '#34495e',
+      }
+    ]
+  };
+
+  public barChartOptions: ChartConfiguration<'bar'>['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'top'
+      },
+      tooltip: {
+        enabled: true,
+        callbacks: {
+          afterLabel: (context) => {
+            const total = this.totalMonthlyCost();
+            const value = context.parsed?.y ?? 0;
+            if (total > 0) {
+              const percentage = ((value / total) * 100).toFixed(1);
+              return `${percentage}% of total`;
+            }
+            return '';
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: function(value) {
+            return value + ' €';
+          }
+        }
+      }
+    }
+  };
+
+  constructor() {
+    effect(() => {
+      const subs = this.subscriptions().filter(s => s.status === 'active');
+      
+      this.barChartData.labels = subs.map(s => s.name);
+      this.barChartData.datasets[0].data = subs.map(s => {
+        if (s.periodicity === 'MONTHLY') {
+          return s.price;
+        } else if (s.periodicity === 'YEARLY') {
+          return s.price / 12;
+        }
+        return 0;
+      });
+      
+      this.barChartData = { ...this.barChartData };
+    });
+  }
 
   ngOnInit() {
     this.route.paramMap.subscribe(() => {

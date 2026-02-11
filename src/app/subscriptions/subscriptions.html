@@ -29,8 +29,8 @@
             <label class="form-label">Periodicity</label>
             <select class="form-select" formControlName="periodicity">
               <option value="">Select...</option>
-              <option value="Monthly">Monthly</option>
-              <option value="Yearly">Yearly</option>
+              <option value="MONTHLY">Monthly</option>
+              <option value="YEARLY">Yearly</option>
             </select>
           </div>
           <div class="col-md-6">
@@ -57,8 +57,24 @@
     </div>
   </div>
   }
+  @else {
+    <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Monthly Cost Overview</h5>
+      <p class="fs-4 text mb-3">Total Monthly Cost: {{ totalMonthlyCost()}} €</p>
+      <div style="height: 200px; position: relative;">
+        <canvas baseChart
+          [data]="barChartData"
+          [options]="barChartOptions"
+          type="bar">
+        </canvas>
+      </div>
+    </div>
+  </div>
+  }
 
   <div class="row g-4">
+    
     @for (subscription of subscriptions(); track subscription.id) {
       <div class="col-md-6 col-lg-4">
         <div class="card shadow-sm h-100 subscription-card">
